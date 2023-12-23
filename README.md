@@ -36,82 +36,118 @@ yarn dev
 
 You should see a message in the terminal saying that the server is running on port 3000.
 
-## Usage
-### API
-The heartbeat server (running on port 8080) provides the following endpoints (all responses are in JSON format)
+# Usage
+## API
+The heartbeat server (running on port `8080`) provides the following endpoints.
 
-#### GET /api/cpu
+* [GET `/api/cpu`](#get-apicpu)
+* [GET `/api/memory`](#get-apimemory)
+* [GET `/api/disk`](#get-apidisk)
+* [GET `/api/network`](#get-apinetwork)
+
+### GET `/api/cpu`
 Returns a JSON response containing a `float64` representing the CPU usage of the machine that the server is running on.
 
 Example response:
 ```json
 {
-  "cpu_usage": 12.243453423
+  "cpu_usage": 15.321
 }
 ```
 
-#### GET /api/memory
-Returns a JSON response object containing memory usage information (in `bytes`) of the machine that the server is running on.
+### GET `/api/memory`
+Returns a JSON object with details about the memory usage of the server.
 
 Example response:
 ```json
 {
-    "memory_usage": {
-        "total": 17179869184,
-        "available": 5659533312,
-        "used": 11520335872,
-        "usedPercent": 67.05718040466309,
-        "free": 47128576,
-        "active": 5571727360,
-        "inactive": 5612404736,
-        "wired": 4094337024
+  "memory_usage": {
+    "total": 16000000000,        // Total memory in bytes.
+    "available": 6000000000,     // Memory available for use in bytes.
+    "used": 10000000000,         // Memory currently in use in bytes.
+    "usedPercent": 62.5,         // Percentage of total memory currently in use.
+    "free": 50000000,            // Free memory in bytes.
+    "active": 5500000000,        // Memory actively in use or recently used.
+    "inactive": 4500000000,      // Memory not actively in use.
+    "wired": 4000000000          // Memory marked to stay in RAM, not to be moved to disk.
+  }
+}
+```
+
+### GET `/api/disk`
+Returns a JSON object with an array of disk usage information. Each item in the array represents a separate partition.
+
+Example response:
+```json
+{
+  "disk_usage": [
+    {
+      "path": "/",                   // Mount path of the partition.
+      "fstype": "apfs",              // File system type of the partition.
+      "total": 500000000000,         // Total size of the partition in bytes.
+      "free": 100000000000,          // Free space available on the partition in bytes.
+      "used": 400000000000,          // Space used on the partition in bytes.
+      "usedPercent": 80.0,           // Percentage of the partition that is used.
+      "inodesTotal": 1000000,        // Total number of inodes.
+      "inodesUsed": 500000,          // Number of inodes used.
+      "inodesFree": 500000,          // Number of inodes free.
+      "inodesUsedPercent": 50.0      // Percentage of inodes that are used.
     }
+  ]
 }
+
+
 ```
 
-#### GET /api/disk
-Returns a JSON response object containing disk usage information (in `bytes`) for each partition within the environment that the server is running on.
+### GET `/api/network`
+Returns a JSON response object containing network information for each network interface within the environment that the server is running on.
 
 Example response:
 ```json
 {
-    "disk_usage": [
-        {
-            "path": "/",
-            "fstype": "apfs",
-            "total": 499963174912,
-            "free": 70238134272,
-            "used": 429725040640,
-            "usedPercent": 85.95133845920495,
-            "inodesTotal": 686313011,
-            "inodesUsed": 393731,
-            "inodesFree": 685919280,
-            "inodesUsedPercent": 0.057369012926960235
-        }
-    ]
+  "io_usage": [
+    {
+      "name": "lo0",                     // Name of the network interface.
+      "bytesSent": 1000000,              // Total bytes sent through this interface.
+      "bytesRecv": 1000000,              // Total bytes received through this interface.
+      "packetsSent": 1000,               // Number of network packets sent.
+      "packetsRecv": 1000,               // Number of network packets received.
+      "errin": 0,                        // Count of incoming errors.
+      "errout": 0,                       // Count of outgoing errors.
+      "dropin": 0,                       // Count of incoming packets dropped.
+      "dropout": 0,                      // Count of outgoing packets dropped.
+      "fifoin": 0,                       // FIFO buffer errors on incoming data.
+      "fifoout": 0                       // FIFO buffer errors on outgoing data.
+    }
+  ],
+  "interfaces": [
+    {
+      "index": 2,                        // Unique identifier for the network interface.
+      "mtu": 1500,                       // Maximum Transmission Unit in bytes.
+      "name": "eth0",                    // Designated name of the network interface.
+      "hardwareaddr": "00:1A:2B:3C:4D:5E", // Hardware (MAC) address of the interface.
+      "flags": ["up", "broadcast", "multicast"], // Flags indicating the interface's state and capabilities.
+      "addrs": [{"addr": "192.168.1.100"}] // IP addresses associated with the interface.
+    }
+  ],
+  "connections": [
+    {
+      "fd": 3,                           // File Descriptor for the network socket.
+      "family": 2,                       // Address family (2 for AF_INET - IPv4).
+      "type": 1,                         // Type of socket (1 for SOCK_STREAM - TCP).
+      "localaddr": {
+        "ip": "192.168.1.100",           // Local IP address.
+        "port": 8080                      // Local port number.
+      },
+      "remoteaddr": {
+        "ip": "192.168.1.101",           // Remote IP address.
+        "port": 443                       // Remote port number.
+      },
+      "status": "ESTABLISHED",           // Status of the connection.
+      "uids": [1001],                    // User IDs associated with the connection.
+      "pid": 1234                        // Process ID owning the socket.
+    }
+  ]
 }
 ```
 
-#### GET /api/network
-Returns a JSON response object containing network usage information (in `bytes`) for each network interface within the environment that the server is running on.
-
-Example response:
-```json
-{
-    "network_usage": [
-        {
-            "name": "lo0",
-            "bytesSent": 74798966,
-            "bytesRecv": 74798966,
-            "packetsSent": 235327,
-            "packetsRecv": 235327,
-            "errin": 0,
-            "errout": 0,
-            "dropin": 0,
-            "dropout": 0,
-            "fifoin": 0,
-            "fifoout": 0
-        }
-    ]
-}
-```

@@ -50,3 +50,19 @@ func GetNetworkUsage() ([]net.IOCountersStat, error) {
 	}
 	return netStats, nil
 }
+
+func GetNetworkInterfaces() ([]net.InterfaceStat, error) {
+	netInterfaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+	return netInterfaces, nil
+}
+
+func GetNetworkConnections() ([]net.ConnectionStat, error) {
+	netConnections, err := net.Connections("all")
+	if err != nil {
+		return nil, err
+	}
+	return netConnections, nil
+}

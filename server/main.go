@@ -47,10 +47,32 @@ func diskHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func networkHandler(w http.ResponseWriter, r *http.Request) {
-	usage, err := monitor.GetNetworkUsage()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	ioUsage, ioErr := monitor.GetNetworkUsage()
+	interfaces, intErr := monitor.GetNetworkInterfaces()
+	connections, connErr := monitor.GetNetworkConnections()
+
+	if ioErr != nil || intErr != nil || connErr != nil {
+		var networkError error
+		if ioErr != nil {
+			networkError = ioErr
+		} else if intErr != nil {
+			networkError = intErr
+		} else {
+			networkError = connErr
+		}
+		http.Error(w, networkError.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string][]net.IOCountersStat{"network_usage": usage})
+
+	networkUsage := struct {
+		IOUsage     []net.IOCountersStat `json:"io_usage"`
+		Interfaces  []net.InterfaceStat  `json:"interfaces"`
+		Connections []net.ConnectionStat `json:"connections"`
+	}{
+		IOUsage:     ioUsage,
+		Interfaces:  interfaces,
+		Connections: connections,
+	}
+
+	json.NewEncoder(w).Encode(networkUsage)
 }
