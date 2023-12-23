@@ -151,3 +151,16 @@ Example response:
 }
 ```
 
+If you want to learn more about a connection[i].pid, then you can make a request to the `/api/process` endpoint, passing in the process ID as a `pid` query parameter.
+
+### GET `/api/process`
+Accepts a `pid` query parameter. Returns a JSON response object containing information about a given process running on the environment that the server is running on.
+
+Example response:
+```json
+{
+  "cmdline": "/Path/To/Cmdline/Process/Executable",
+  "name": "Process Name",
+  "pid": 1234
+}
+```

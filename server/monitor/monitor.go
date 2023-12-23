@@ -5,6 +5,7 @@ import (
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
 )
 
 func GetCPUUsage() (float64, error) {
@@ -65,4 +66,29 @@ func GetNetworkConnections() ([]net.ConnectionStat, error) {
 		return nil, err
 	}
 	return netConnections, nil
+}
+
+func GetProcessDetails(pid int32) (map[string]interface{}, error) {
+	proc, err := process.NewProcess(pid)
+	if err != nil {
+		return nil, err
+	}
+
+	name, err := proc.Name()
+	if err != nil {
+		return nil, err
+	}
+
+	cmdline, err := proc.Cmdline()
+	if err != nil {
+		return nil, err
+	}
+
+	details := map[string]interface{}{
+		"pid":     pid,
+		"name":    name,
+		"cmdline": cmdline,
+	}
+
+	return details, nil
 }

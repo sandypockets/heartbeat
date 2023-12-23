@@ -7,6 +7,7 @@ import (
 	"heartbeat/server/monitor"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func main() {
@@ -14,6 +15,7 @@ func main() {
 	http.HandleFunc("/api/memory", memoryHandler)
 	http.HandleFunc("/api/disk", diskHandler)
 	http.HandleFunc("/api/network", networkHandler)
+	http.HandleFunc("/api/process", processHandler)
 
 	log.Println("Starting server on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -75,4 +77,24 @@ func networkHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(networkUsage)
+}
+
+func processHandler(w http.ResponseWriter, r *http.Request) {
+	pidString := r.URL.Query().Get("pid")
+	if pidString == "" {
+		http.Error(w, "Missing required parameter: pid", http.StatusBadRequest)
+		return
+	}
+
+	pid, err := strconv.ParseInt(pidString, 10, 32)
+	if err != nil {
+		http.Error(w, "Invalid pid", http.StatusBadRequest)
+	}
+
+	details, err := monitor.GetProcessDetails(int32(pid))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	json.NewEncoder(w).Encode(details)
 }
