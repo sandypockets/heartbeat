@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -17,17 +18,22 @@ func main() {
 	http.HandleFunc("/api/network", networkHandler)
 	http.HandleFunc("/api/process", processHandler)
 
+	go monitor.CollectSystemMetrics(30 * time.Second)
+
 	log.Println("Starting server on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func cpuHandler(w http.ResponseWriter, r *http.Request) {
-	usage, err := monitor.GetCPUUsage()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(map[string]float64{"cpu_usage": usage})
+	monitor.Metrics.RLock()
+	defer monitor.Metrics.RUnlock()
+
+	json.NewEncoder(w).Encode(map[string]float64{
+		"current_usage": monitor.Metrics.CPUUsage.Current,
+		"avg_5min":      monitor.Metrics.CPUUsage.Avg5min,
+		"avg_10min":     monitor.Metrics.CPUUsage.Avg10min,
+		"avg_15min":     monitor.Metrics.CPUUsage.Avg15min,
+	})
 }
 
 func memoryHandler(w http.ResponseWriter, r *http.Request) {

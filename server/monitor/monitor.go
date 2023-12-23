@@ -6,17 +6,69 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 	"github.com/shirou/gopsutil/process"
+	"sync"
+	"time"
 )
 
-func GetCPUUsage() (float64, error) {
-	percentages, err := cpu.Percent(0, false)
-	if err != nil {
-		return 0, err
+type SytemMetrics struct {
+	sync.RWMutex
+	CPUUsage struct {
+		Current  float64
+		Avg5min  float64
+		Avg10min float64
+		Avg15min float64
+		History  []float64
 	}
-	if len(percentages) > 0 {
-		return percentages[0], nil
+}
+
+var Metrics SytemMetrics
+
+func CollectSystemMetrics(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	for {
+		select {
+		case <-ticker.C:
+			updateCPUUsage()
+			calculateAverages()
+		}
 	}
-	return 0, nil
+}
+
+func updateCPUUsage() {
+	current, _ := cpu.Percent(0, false)
+	Metrics.Lock()
+	Metrics.CPUUsage.Current = current[0]
+	Metrics.CPUUsage.History = append(Metrics.CPUUsage.History, current[0])
+	Metrics.Unlock()
+}
+
+func calculateAverage(data []float64, minutes int) float64 {
+	total := 0.0
+	count := 0
+
+	for i := len(data) - 1; i >= 0 && count < minutes; i-- {
+		total += data[i]
+		count++
+	}
+
+	if count == 0 {
+		return 0
+	}
+
+	return total / float64(count)
+}
+
+func calculateAverages() {
+	Metrics.Lock()
+	defer Metrics.Unlock()
+
+	Metrics.CPUUsage.Avg5min = calculateAverage(Metrics.CPUUsage.History, 5)
+	Metrics.CPUUsage.Avg10min = calculateAverage(Metrics.CPUUsage.History, 10)
+	Metrics.CPUUsage.Avg15min = calculateAverage(Metrics.CPUUsage.History, 15)
+
+	if len(Metrics.CPUUsage.History) > 30 {
+		Metrics.CPUUsage.History = Metrics.CPUUsage.History[1:]
+	}
 }
 
 func GetMemoryUsage() (*mem.VirtualMemoryStat, error) {

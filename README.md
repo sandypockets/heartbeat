@@ -51,12 +51,15 @@ Returns a JSON response containing a `float64` representing the CPU usage of the
 Example response:
 ```json
 {
-  "cpu_usage": 15.321
+  "avg_10min": 14.025692096349218,
+  "avg_15min": 11.311592912035149,
+  "avg_5min": 25.32370013920623,
+  "current_usage": 19.35470336494544
 }
 ```
 
 ### GET `/api/memory`
-Returns a JSON object with details about the memory usage of the server.
+Returns a JSON object with details about the memory usage of the machine.
 
 Example response:
 ```json
