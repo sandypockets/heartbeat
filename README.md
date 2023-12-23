@@ -68,3 +68,26 @@ Example response:
     }
 }
 ```
+
+#### GET /api/disk
+Returns a JSON response object containing disk usage information (in `bytes`) for each partition within the environment that the server is running on.
+
+Example response:
+```json
+{
+    "disk_usage": [
+        {
+            "path": "/",
+            "fstype": "apfs",
+            "total": 499963174912,
+            "free": 70238134272,
+            "used": 429725040640,
+            "usedPercent": 85.95133845920495,
+            "inodesTotal": 686313011,
+            "inodesUsed": 393731,
+            "inodesFree": 685919280,
+            "inodesUsedPercent": 0.057369012926960235
+        }
+    ]
+}
+```
