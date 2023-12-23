@@ -91,3 +91,27 @@ Example response:
     ]
 }
 ```
+
+#### GET /api/network
+Returns a JSON response object containing network usage information (in `bytes`) for each network interface within the environment that the server is running on.
+
+Example response:
+```json
+{
+    "network_usage": [
+        {
+            "name": "lo0",
+            "bytesSent": 74798966,
+            "bytesRecv": 74798966,
+            "packetsSent": 235327,
+            "packetsRecv": 235327,
+            "errin": 0,
+            "errout": 0,
+            "dropin": 0,
+            "dropout": 0,
+            "fifoin": 0,
+            "fifoout": 0
+        }
+    ]
+}
+```

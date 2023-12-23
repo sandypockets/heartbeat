@@ -4,6 +4,7 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/net"
 )
 
 func GetCPUUsage() (float64, error) {
@@ -40,4 +41,12 @@ func GetDiskUsage() ([]disk.UsageStat, error) {
 		diskStats = append(diskStats, *diskStat)
 	}
 	return diskStats, nil
+}
+
+func GetNetworkUsage() ([]net.IOCountersStat, error) {
+	netStats, err := net.IOCounters(true)
+	if err != nil {
+		return nil, err
+	}
+	return netStats, nil
 }
