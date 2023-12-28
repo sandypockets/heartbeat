@@ -7,6 +7,16 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      screens: {
+        xxs: '360px',
+        '3xl': '1800px',
+        '4xl': '200px',
+        '5xl': '2300px',
+      },
+      maxWidth: {
+        xxs: '320px',
+        xxxs: '280px',
+      },
     },
   },
   plugins: [],
