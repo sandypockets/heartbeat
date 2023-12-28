@@ -10,15 +10,12 @@ export default function Process({ pid }) {
   }, [pid]);
 
   return (
-    <div>
-      <ul>
-        <li>Process name: {process['name']}</li>
-        <li>ID: {process['pid']}</li>
-        <li>
-          <span>Command line process:</span>
-          <p className="break-words overflow-scroll h-24">{process['cmdline']}</p>
-        </li>
-      </ul>
+    <div className="my-2 border-b border-white pb-3 mb-3">
+      <p className="flex justify-between font-mono">
+        <span className="text-xl font-semibold">{process['name']}</span>
+        <span className="text-2xl">{process['pid']}</span>
+      </p>
+      <p className="mt-3 font-mono break-words text-wrap whitespace-normal overflow-scroll">{process['cmdline']}</p>
     </div>
   );
 }

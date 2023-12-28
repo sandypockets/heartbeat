@@ -1,3 +1,3 @@
 export default function SectionTitle({ children }) {
-  return <h2 className="text-4xl font-bold">{children}</h2>;
+  return <h2 className="text-5xl font-bold w-fit">{children}</h2>;
 }
