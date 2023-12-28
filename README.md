@@ -38,7 +38,7 @@ You should see a message in the terminal saying that the server is running on po
 
 # Usage
 ## API
-The heartbeat server (running on port `8080`) provides the following endpoints.
+The heartbeat server (running on port `8080`) provides the following endpoints. The frontend uses the Next.js API routes (running on port `3000`) in the same structure to consume the server's API. 
 
 * [GET `/api/cpu`](#get-apicpu)
 * [GET `/api/memory`](#get-apimemory)
