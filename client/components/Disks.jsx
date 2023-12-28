@@ -3,10 +3,15 @@ import SectionSubtitle from '@/components/Layout/SectionSubtitle';
 import FourColGridWrapper from '@/components/Layout/FourColGridWrapper';
 import ItemWrapper from '@/components/Layout/ItemWrapper';
 import { bytesToGb } from '@/helpers/conversions';
+import DisksChart from '@/components/DisksChart';
 
 export default function Disks({ disks }) {
+  const diskLabels = disks.map(disk => disk.path);
+  const usedData = disks.map(disk => bytesToGb(disk['used'], true));
+  const freeData = disks.map(disk => bytesToGb(disk['free'], true));
+
   return (
-    <div>
+    <div className="bg-gray-950 p-12 rounded-md">
       <SectionTitle>Disks</SectionTitle>
       <SectionSubtitle>Monitor disk usage across your machine</SectionSubtitle>
       <FourColGridWrapper>
@@ -42,6 +47,7 @@ export default function Disks({ disks }) {
             </ItemWrapper>
           ))}
       </FourColGridWrapper>
+      <DisksChart labels={diskLabels} usedData={usedData} freeData={freeData} />
     </div>
   );
 }
