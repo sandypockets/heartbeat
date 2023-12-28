@@ -1,0 +1,15 @@
+dist/
+node_modules/
+.env
+*.md
+.cache/
+*.log
+*.tmp
+.git/
+.vscode/
+.idea/
+coverage/
+.next/
+public/
+README.md
+yarn.lock
