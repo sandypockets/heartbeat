@@ -25,13 +25,15 @@ export default function Home() {
 
   useEffect(() => {
     queryNextApi('cpu').then(data => setCpu(data));
-    queryNextApi('memory').then(data => setMemory(data['memory_usage']));
+    queryNextApi('memory').then(data => setMemory(data));
     queryNextApi('disk').then(data => setDisks(data['disk_usage']));
     queryNextApi('network').then(data => setNetwork(data));
 
     const interval = setInterval(async () => {
-      const data = await queryNextApi('cpu');
-      setCpu(data);
+      const cpuData = await queryNextApi('cpu');
+      setCpu(cpuData);
+      const memoryData = await queryNextApi('memory');
+      setMemory(memoryData);
     }, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -50,12 +52,12 @@ export default function Home() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="flex flex-col gap-6">
-            <Cpu cpu={cpu} nextUpdate={nextUpdateIn} />
-            <Memory memory={memory} />
+            <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
+            <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
           </div>
           <Disks disks={disks} />
         </div>
-        <div className="flex flex-col gap-x-6">
+        <div className="flex flex-col gap-x-6 bg-gray-950 p-12 rounded-md">
           <div>
             <SectionTitle>Network</SectionTitle>
             <SectionSubtitle>Monitor your Network usage.</SectionSubtitle>

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 	"heartbeat/server/monitor"
 	"log"
@@ -37,12 +38,36 @@ func cpuHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func memoryHandler(w http.ResponseWriter, r *http.Request) {
-	usage, err := monitor.GetMemoryUsage()
+	memoryStats, err := mem.VirtualMemory()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]interface{}{"memory_usage": usage})
+
+	monitor.Metrics.RLock()
+	memoryAverages := map[string]uint64{
+		"current_usage": monitor.Metrics.MemoryUsage.Current,
+		"avg_5min":      monitor.Metrics.MemoryUsage.Avg5min,
+		"avg_10min":     monitor.Metrics.MemoryUsage.Avg10min,
+		"avg_15min":     monitor.Metrics.MemoryUsage.Avg15min,
+	}
+	monitor.Metrics.RUnlock()
+
+	response := map[string]interface{}{
+		"memory_usage": map[string]interface{}{
+			"total":       memoryStats.Total,
+			"available":   memoryStats.Available,
+			"used":        memoryStats.Used,
+			"usedPercent": memoryStats.UsedPercent,
+			"free":        memoryStats.Free,
+			"active":      memoryStats.Active,
+			"inactive":    memoryStats.Inactive,
+			"wired":       memoryStats.Wired,
+		},
+		"averages": memoryAverages,
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func diskHandler(w http.ResponseWriter, r *http.Request) {

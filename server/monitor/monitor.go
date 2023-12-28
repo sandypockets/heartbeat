@@ -19,6 +19,13 @@ type SytemMetrics struct {
 		Avg15min float64
 		History  []float64
 	}
+	MemoryUsage struct {
+		Current  uint64
+		Avg5min  uint64
+		Avg10min uint64
+		Avg15min uint64
+		History  []uint64
+	}
 }
 
 var Metrics SytemMetrics
@@ -29,20 +36,29 @@ func CollectSystemMetrics(interval time.Duration) {
 		select {
 		case <-ticker.C:
 			updateCPUUsage()
+			updateMemoryUsage()
 			calculateAverages()
 		}
 	}
 }
 
+func updateMemoryUsage() {
+	memoryStats, _ := mem.VirtualMemory()
+	Metrics.Lock()
+	Metrics.MemoryUsage.Current = memoryStats.Used
+	Metrics.MemoryUsage.History = append(Metrics.MemoryUsage.History, memoryStats.Used)
+	Metrics.Unlock()
+}
+
 func updateCPUUsage() {
-	current, _ := cpu.Percent(0, false)
+	current, _ := cpu.Percent(100*time.Millisecond, false)
 	Metrics.Lock()
 	Metrics.CPUUsage.Current = current[0]
 	Metrics.CPUUsage.History = append(Metrics.CPUUsage.History, current[0])
 	Metrics.Unlock()
 }
 
-func calculateAverage(data []float64, minutes int) float64 {
+func calculateCpuAverage(data []float64, minutes int) float64 {
 	total := 0.0
 	count := 0
 
@@ -58,25 +74,41 @@ func calculateAverage(data []float64, minutes int) float64 {
 	return total / float64(count)
 }
 
+func calculateMemoryAverage(data []uint64, intervals int) uint64 {
+	total := uint64(0)
+	count := 0
+
+	for i := len(data) - 1; i >= 0 && count < intervals; i-- {
+		total += data[i]
+		count++
+	}
+
+	if count == 0 {
+		return 0
+	}
+
+	return total / uint64(count)
+}
+
 func calculateAverages() {
 	Metrics.Lock()
 	defer Metrics.Unlock()
 
-	Metrics.CPUUsage.Avg5min = calculateAverage(Metrics.CPUUsage.History, 5)
-	Metrics.CPUUsage.Avg10min = calculateAverage(Metrics.CPUUsage.History, 10)
-	Metrics.CPUUsage.Avg15min = calculateAverage(Metrics.CPUUsage.History, 15)
+	Metrics.CPUUsage.Avg5min = calculateCpuAverage(Metrics.CPUUsage.History, 5)
+	Metrics.CPUUsage.Avg10min = calculateCpuAverage(Metrics.CPUUsage.History, 10)
+	Metrics.CPUUsage.Avg15min = calculateCpuAverage(Metrics.CPUUsage.History, 15)
+
+	Metrics.MemoryUsage.Avg5min = calculateMemoryAverage(Metrics.MemoryUsage.History, 5)
+	Metrics.MemoryUsage.Avg10min = calculateMemoryAverage(Metrics.MemoryUsage.History, 10)
+	Metrics.MemoryUsage.Avg15min = calculateMemoryAverage(Metrics.MemoryUsage.History, 15)
 
 	if len(Metrics.CPUUsage.History) > 30 {
 		Metrics.CPUUsage.History = Metrics.CPUUsage.History[1:]
 	}
-}
 
-func GetMemoryUsage() (*mem.VirtualMemoryStat, error) {
-	memoryStats, err := mem.VirtualMemory()
-	if err != nil {
-		return nil, err
+	if len(Metrics.MemoryUsage.History) > 30 {
+		Metrics.MemoryUsage.History = Metrics.MemoryUsage.History[1:]
 	}
-	return memoryStats, nil
 }
 
 func GetDiskUsage() ([]disk.UsageStat, error) {
