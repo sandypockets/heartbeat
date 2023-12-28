@@ -8,6 +8,7 @@ export default function CpuChart({ cpu }) {
   const [cpuHistory, setCpuHistory] = useState([]);
 
   useEffect(() => {
+    if (cpu.current_usage === undefined) return;
     setCpuHistory(prevHistory => [...prevHistory, cpu]);
   }, [cpu]);
 
@@ -42,6 +43,8 @@ export default function CpuChart({ cpu }) {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
@@ -61,7 +64,7 @@ export default function CpuChart({ cpu }) {
   };
 
   return (
-    <div className="bg-gray-800 rounded-md my-3">
+    <div className="bg-gray-800 rounded-md my-3 h-72 p-4 w-full">
       <Line data={data} options={options} />
     </div>
   );

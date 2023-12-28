@@ -4,13 +4,13 @@ import ItemWrapper from '@/components/Layout/ItemWrapper';
 import FourColGridWrapper from '@/components/Layout/FourColGridWrapper';
 import CpuChart from '@/components/CpuChart';
 
-export default function Cpu({ cpu, nextUpdate }) {
+export default function Cpu({ cpu, nextUpdateIn }) {
   return (
     <div className="w-full bg-gray-950 p-12 rounded-md">
       <SectionTitle>CPU</SectionTitle>
       <SectionSubtitle>Monitor your CPU usage.</SectionSubtitle>
       <p>
-        Next update in <span className={nextUpdate < 10 ? 'text-green-400' : ''}>{nextUpdate}</span>
+        Next update in <span className={nextUpdateIn < 10 ? 'text-green-400' : ''}>{nextUpdateIn}</span>
       </p>
       <FourColGridWrapper>
         <ItemWrapper bg="bg-green-800">
