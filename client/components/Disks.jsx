@@ -6,12 +6,12 @@ import { bytesToGb } from '@/helpers/conversions';
 import DisksChart from '@/components/DisksChart';
 
 export default function Disks({ disks }) {
-  const diskLabels = disks.map(disk => disk.path);
-  const usedData = disks.map(disk => bytesToGb(disk['used'], true));
-  const freeData = disks.map(disk => bytesToGb(disk['free'], true));
+  const diskLabels = disks?.length > 0 && disks?.map(disk => disk.path);
+  const usedData = disks?.length > 0 && disks?.map(disk => bytesToGb(disk['used'], true));
+  const freeData = disks?.length > 0 && disks?.map(disk => bytesToGb(disk['free'], true));
 
   return (
-    <div className="bg-gray-950 p-12 rounded-md">
+    <div className="bg-gray-950 p-12 rounded-md h-fit">
       <SectionTitle>Disks</SectionTitle>
       <SectionSubtitle>Monitor disk usage across your machine</SectionSubtitle>
       <FourColGridWrapper>
@@ -46,6 +46,18 @@ export default function Disks({ disks }) {
               </ul>
             </ItemWrapper>
           ))}
+        <ItemWrapper>
+          <div className="flex flex-col items-end">
+            <div>
+              <span className="text-3xl mr-1">{disks?.length}</span>
+              <span>disks</span>
+            </div>
+            <div>
+              <span className="text-3xl mr-1">{bytesToGb(disks[0]?.total, true)}</span>
+              <span>GB</span>
+            </div>
+          </div>
+        </ItemWrapper>
       </FourColGridWrapper>
       <DisksChart labels={diskLabels} usedData={usedData} freeData={freeData} />
     </div>

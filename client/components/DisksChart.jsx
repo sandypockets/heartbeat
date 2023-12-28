@@ -21,6 +21,8 @@ export default function DisksChart({ labels, usedData, freeData }) {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -33,7 +35,7 @@ export default function DisksChart({ labels, usedData, freeData }) {
   };
 
   return (
-    <div className="bg-gray-800 p-3 rounded-md my-3">
+    <div className="bg-gray-800 p-3 rounded-md my-3 h-72">
       <Bar data={data} options={options} />
     </div>
   );
