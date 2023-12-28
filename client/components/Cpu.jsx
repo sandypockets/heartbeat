@@ -2,14 +2,15 @@ import SectionTitle from '@/components/Layout/SectionTitle';
 import SectionSubtitle from '@/components/Layout/SectionSubtitle';
 import ItemWrapper from '@/components/Layout/ItemWrapper';
 import FourColGridWrapper from '@/components/Layout/FourColGridWrapper';
+import CpuChart from '@/components/CpuChart';
 
 export default function Cpu({ cpu, nextUpdate }) {
   return (
-    <div className="w-full">
+    <div className="w-full bg-gray-950 p-12 rounded-md">
       <SectionTitle>CPU</SectionTitle>
       <SectionSubtitle>Monitor your CPU usage.</SectionSubtitle>
       <p>
-        Next update in <span className={nextUpdate < 10 && 'text-green-400'}>{nextUpdate}</span>
+        Next update in <span className={nextUpdate < 10 ? 'text-green-400' : ''}>{nextUpdate}</span>
       </p>
       <FourColGridWrapper>
         <ItemWrapper bg="bg-green-800">
@@ -29,6 +30,7 @@ export default function Cpu({ cpu, nextUpdate }) {
           <span className="font-mono text-lg">{cpu['avg_15min']?.toString().slice(0, 15)}%</span>
         </ItemWrapper>
       </FourColGridWrapper>
+      <CpuChart cpu={cpu} />
     </div>
   );
 }
