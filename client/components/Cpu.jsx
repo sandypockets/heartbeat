@@ -6,7 +6,7 @@ import CpuChart from '@/components/CpuChart';
 
 export default function Cpu({ cpu, nextUpdateIn }) {
   return (
-    <div className="w-full bg-gray-950 p-12 rounded-md">
+    <div className="bg-gray-950 p-12 rounded-md">
       <SectionTitle>CPU</SectionTitle>
       <SectionSubtitle>Monitor your CPU usage.</SectionSubtitle>
       <p>

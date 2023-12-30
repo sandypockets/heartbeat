@@ -56,21 +56,17 @@ export default function Home() {
         <h1 className="text-6xl font-bold mb-1">Heartbeat</h1>
         <span className="text-2xl">Keep a pulse on your machine's health</span>
       </div>
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col xl:flex-row gap-6">
-          <div className="flex flex-col gap-6">
-            <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
-            <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
-            <Uptime uptime={uptime} />
-          </div>
-          <div>
-            <Disks disks={disks} />
-            <DiskIo diskIo={diskIo} />
-          </div>
+      <div className="flex flex-col md:grid md:grid-cols-2 3xl:grid-cols-3 gap-3">
+        <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
+        <DiskIo diskIo={diskIo} />
+        <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
+        <Uptime uptime={uptime} />
+        <div className="col-span-2">
+          <Disks disks={disks} />
         </div>
-        <div className="3xl:pr-24">
-          <NetworkConnectionsGroup network={network} />
-        </div>
+      </div>
+      <div className="mt-3">
+        <NetworkConnectionsGroup network={network} />
       </div>
     </main>
   );

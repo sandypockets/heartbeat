@@ -3,7 +3,7 @@ import SectionSubtitle from '@/components/Layout/SectionSubtitle';
 
 export default function Uptime({ uptime }) {
   return (
-    <div className="bg-gray-950 p-12 mb-6 rounded-md">
+    <div className="bg-gray-950 p-12 rounded-md">
       <SectionTitle>Uptime</SectionTitle>
       <SectionSubtitle>Time since last boot</SectionSubtitle>
       <div className="bg-gray-950 p-6 rounded-md">
