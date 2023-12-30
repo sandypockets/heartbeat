@@ -1,7 +1,17 @@
 # Heartbeat
-Heartbeat is a backend server written in Go. The server provides an API containing monitoring data of the environment that the server is running on. 
+Heartbeat is system health monitoring tool. It's comprised of a backend server written in Go and a Next.js frontend. Together, the application provides real-time monitoring of various key system metrics, showcasing how Go can be used for efficient system data collection and how these metrics can be visualized in a web interface.
 
-The frontend of Heartbeat is a Next.js application, which consumes the API, displaying the monitoring information to the user.
+## Purpose
+The primary goal of Heartbeat is to offer a clear and immediate view of key performance metrics for a server environment. It's designed for developers, system administrators, or anyone interested in getting hands-on experience with system or server monitoring tools. Key features include:
+
+- **Real-Time Data**: Tracks and displays real-time CPU, memory, disk, and network usage.
+- **Historical Trends**: Visualizes CPU and memory usage over different time intervals for trend analysis.
+- **Process Information**: Provides details on specific running processes.
+- **Network Insights**: Includes detailed network statistics for a comprehensive view of network health.
+- **User-Friendly Interface**: The Next.js frontend simplifies data presentation, making it accessible even for those new to system monitoring.
+
+## Learning Experience
+Building Heartbeat has been an educational journey in utilizing Go for backend development, focusing on performance and concurrency, and integrating it with a modern JavaScript framework like Next.js for the frontend. This project serves as a practical example for anyone interested in learning about these technologies or server monitoring concepts.
 
 ## Getting Started
 ### Prerequisites
@@ -44,6 +54,9 @@ The heartbeat server (running on port `8080`) provides the following endpoints. 
 * [GET `/api/memory`](#get-apimemory)
 * [GET `/api/disk`](#get-apidisk)
 * [GET `/api/network`](#get-apinetwork)
+* [GET `/api/diskio`](#get-apidiskio)
+* [GET `/api/uptime`](#get-apiuptime)
+* [GET `/api/process`](#get-apiprocess)
 
 ### GET `/api/cpu`
 Returns a JSON response containing a `float64` representing the CPU usage of the machine that the server is running on.
@@ -98,8 +111,40 @@ Example response:
     }
   ]
 }
+```
 
+### GET `/api/diskio`
+Returns a JSON object with Disk I/O (Input/Output) statistics for each disk on the machine. Each item in the array represents a separate disk.
 
+Example response:
+        
+```json
+{
+  "disk0": {
+    "readCount": 1024567,            // Total number of reads completed.
+    "writeCount": 324567,            // Total number of writes completed.
+    "readBytes": 9876543210,         // Total number of bytes read.
+    "writeBytes": 1234567890,        // Total number of bytes written.
+    "readTime": 456123,              // Total time spent on read operations (ms).
+    "writeTime": 789123,             // Total time spent on write operations (ms).
+    "iopsInProgress": 5,             // Number of I/O operations in progress.
+    "ioTime": 891234,                // Total time spent on I/O operations (ms).
+    "weightedIO": 12345,             // Weighted time spent on I/O operations (ms).
+    "name": "diskX1",                // Name of the disk.
+    "serialNumber": "ABCD1234XYZ",   // Serial number of the disk.
+    "label": "MainStorage"           // Label of the disk.
+  }
+}
+```
+
+### GET `/api/uptime`
+Returns a JSON object containing the uptime of the machine in seconds.
+
+Example response:
+```json
+{
+  "uptime": 36000
+}
 ```
 
 ### GET `/api/network`
