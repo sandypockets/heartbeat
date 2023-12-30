@@ -4,7 +4,7 @@ import DiskIoChart from '@/components/DiskIoChart';
 
 export default function DiskIo({ diskIo }) {
   return (
-    <div className="bg-gray-950 p-12 rounded-md">
+    <div className="bg-gray-950 p-6 sm:p-12 rounded-md">
       <SectionTitle>Disk IO</SectionTitle>
       <SectionSubtitle>Get a clearer picture on read/write tasks</SectionSubtitle>
       <div className="bg-gray-950 rounded-md">

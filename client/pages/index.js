@@ -3,9 +3,9 @@ import queryNextApi from '@/helpers/queryNextApi';
 import Cpu from '@/components/Cpu';
 import Memory from '@/components/Memory';
 import Disks from '@/components/Disks';
-import Uptime from '@/components/Uptime';
 import DiskIo from '@/components/DiskIo';
 import NetworkConnectionsGroup from '@/components/NetworkConnectionsGroup';
+import QuickStats from '@/components/QuickStats';
 
 export default function Home() {
   const [cpu, setCpu] = useState({});
@@ -56,14 +56,14 @@ export default function Home() {
         <h1 className="text-6xl font-bold mb-1">Heartbeat</h1>
         <span className="text-2xl">Keep a pulse on your machine's health</span>
       </div>
-      <div className="flex flex-col md:grid md:grid-cols-2 3xl:grid-cols-3 gap-3">
-        <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
-        <DiskIo diskIo={diskIo} />
-        <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
-        <Uptime uptime={uptime} />
+      <div className="flex flex-col md:grid md:grid-cols-2 4xl:grid-cols-3 gap-3">
+        <QuickStats uptime={uptime} disk={disks[0]} />
         <div className="col-span-2">
           <Disks disks={disks} />
         </div>
+        <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
+        <DiskIo diskIo={diskIo} />
+        <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
       </div>
       <div className="mt-3">
         <NetworkConnectionsGroup network={network} />

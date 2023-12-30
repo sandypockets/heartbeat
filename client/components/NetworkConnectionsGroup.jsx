@@ -5,7 +5,7 @@ import Connections from '@/components/Connections';
 
 export default function NetworkConnectionsGroup({ network }) {
   return (
-    <div className="flex flex-col gap-x-6 bg-gray-950 p-12 rounded-md">
+    <div className="flex flex-col gap-x-6 bg-gray-950 p-6 sm:p-12 rounded-md">
       <div>
         <SectionTitle>Network</SectionTitle>
         <SectionSubtitle>Monitor your Network usage.</SectionSubtitle>
