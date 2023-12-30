@@ -186,6 +186,14 @@ func GetSystemUptime() (uint64, error) {
 	return uptime, nil
 }
 
+func GetSystemBootTime() (uint64, error) {
+	bootTime, err := host.BootTime()
+	if err != nil {
+		return 0, err
+	}
+	return bootTime, nil
+}
+
 func GetDiskIOCounters() (map[string]disk.IOCountersStat, error) {
 	diskStats, err := disk.IOCounters()
 	if err != nil {

@@ -138,7 +138,18 @@ func uptimeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]uint64{"uptime": uptime})
+
+	bootTime, err := monitor.GetSystemBootTime()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	response := map[string]uint64{
+		"uptime":    uptime,
+		"boot_time": bootTime,
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func diskIOHandler(w http.ResponseWriter, r *http.Request) {
