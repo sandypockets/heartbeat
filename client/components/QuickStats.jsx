@@ -3,8 +3,9 @@ import SectionTitle from '@/components/Layout/SectionTitle';
 import SectionSubtitle from '@/components/Layout/SectionSubtitle';
 import BootTime from '@/components/BootTime';
 import DiskSpace from '@/components/DiskSpace';
+import CpuModel from '@/components/CpuModel';
 
-export default function QuickStats({ uptime, disk }) {
+export default function QuickStats({ uptime, disk, cpuModel }) {
   return (
     <div className="bg-gray-950 p-6 sm:p-12 rounded-md">
       <SectionTitle>Quick stats</SectionTitle>

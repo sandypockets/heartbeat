@@ -4,7 +4,7 @@ export default function DiskSpace({ disk }) {
   let diskWarn = false;
   const lowPercent = 10;
 
-  if (disk['free'] < (disk['total'] * lowPercent) / 100) {
+  if (disk && disk['free'] < (disk['total'] * lowPercent) / 100) {
     diskWarn = true;
   }
 
@@ -16,11 +16,11 @@ export default function DiskSpace({ disk }) {
           <p className="flex flex-col text-right">
             <span>Less than {lowPercent}% of disk space remaining</span>
             <span className="text-red-500">
-              {bytesToGb(disk['free'])} / {bytesToGb(disk['total'], true)} GB
+              {disk && bytesToGb(disk['free'])} / {bytesToGb(disk['total'], true)} GB
             </span>
           </p>
         ) : (
-          <p>{bytesToGb(disk['free'])} GB</p>
+          <p>{disk && bytesToGb(disk['free'])} GB</p>
         )}
       </div>
     </div>
