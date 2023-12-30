@@ -3,6 +3,7 @@ package monitor
 import (
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 	"github.com/shirou/gopsutil/process"
@@ -175,4 +176,20 @@ func GetProcessDetails(pid int32) (map[string]interface{}, error) {
 	}
 
 	return details, nil
+}
+
+func GetSystemUptime() (uint64, error) {
+	uptime, err := host.Uptime()
+	if err != nil {
+		return 0, err
+	}
+	return uptime, nil
+}
+
+func GetDiskIOCounters() (map[string]disk.IOCountersStat, error) {
+	diskStats, err := disk.IOCounters()
+	if err != nil {
+		return nil, err
+	}
+	return diskStats, nil
 }

@@ -18,6 +18,8 @@ func main() {
 	http.HandleFunc("/api/disk", diskHandler)
 	http.HandleFunc("/api/network", networkHandler)
 	http.HandleFunc("/api/process", processHandler)
+	http.HandleFunc("/api/uptime", uptimeHandler)
+	http.HandleFunc("/api/diskio", diskIOHandler)
 
 	go monitor.CollectSystemMetrics(30 * time.Second)
 
@@ -128,4 +130,21 @@ func processHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(details)
+}
+
+func uptimeHandler(w http.ResponseWriter, r *http.Request) {
+	uptime, err := monitor.GetSystemUptime()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]uint64{"uptime": uptime})
+}
+
+func diskIOHandler(w http.ResponseWriter, r *http.Request) {
+	diskStats, err := monitor.GetDiskIOCounters()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(diskStats)
 }
