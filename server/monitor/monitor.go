@@ -201,3 +201,11 @@ func GetDiskIOCounters() (map[string]disk.IOCountersStat, error) {
 	}
 	return diskStats, nil
 }
+
+func GetCpuInfo() ([]cpu.InfoStat, error) {
+	cpuInfo, err := cpu.Info()
+	if err != nil {
+		return nil, err
+	}
+	return cpuInfo, nil
+}

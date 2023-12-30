@@ -14,6 +14,7 @@ import (
 
 func main() {
 	http.HandleFunc("/api/cpu", cpuHandler)
+	http.HandleFunc("/api/cpumodel", cpuInfoHandler)
 	http.HandleFunc("/api/memory", memoryHandler)
 	http.HandleFunc("/api/disk", diskHandler)
 	http.HandleFunc("/api/network", networkHandler)
@@ -37,6 +38,14 @@ func cpuHandler(w http.ResponseWriter, r *http.Request) {
 		"avg_10min":     monitor.Metrics.CPUUsage.Avg10min,
 		"avg_15min":     monitor.Metrics.CPUUsage.Avg15min,
 	})
+}
+
+func cpuInfoHandler(w http.ResponseWriter, r *http.Request) {
+	cpuInfo, err := monitor.GetCpuInfo()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(map[string]interface{}{"cpu_model": cpuInfo})
 }
 
 func memoryHandler(w http.ResponseWriter, r *http.Request) {

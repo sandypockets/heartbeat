@@ -9,6 +9,7 @@ import QuickStats from '@/components/QuickStats';
 
 export default function Home() {
   const [cpu, setCpu] = useState({});
+  const [cpuModel, setCpuModel] = useState({});
   const [memory, setMemory] = useState({});
   const [disks, setDisks] = useState({});
   const [network, setNetwork] = useState({});
@@ -31,6 +32,7 @@ export default function Home() {
     queryNextApi('network').then(data => setNetwork(data));
     queryNextApi('uptime').then(data => setUptime(data));
     queryNextApi('diskio').then(data => setDiskIo(data));
+    queryNextApi('cpumodel').then(data => setCpuModel(data['cpu_model'][0]));
 
     const interval = setInterval(async () => {
       const cpuData = await queryNextApi('cpu');
@@ -57,11 +59,11 @@ export default function Home() {
         <span className="text-2xl">Keep a pulse on your machine's health</span>
       </div>
       <div className="flex flex-col md:grid md:grid-cols-2 4xl:grid-cols-3 gap-3">
-        <QuickStats uptime={uptime} disk={disks[0]} />
+        <QuickStats uptime={uptime} disk={disks[0]} cpuModel={cpuModel} />
         <div className="col-span-2">
           <Disks disks={disks} />
         </div>
-        <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
+        <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} cpuModel={cpuModel} />
         <DiskIo diskIo={diskIo} />
         <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
       </div>
