@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import queryNextApi from '@/helpers/queryNextApi';
 import Cpu from '@/components/Cpu';
 import Memory from '@/components/Memory';
-import Network from '@/components/Network';
 import Disks from '@/components/Disks';
-import Connections from '@/components/Connections';
-import SectionTitle from '@/components/Layout/SectionTitle';
-import SectionSubtitle from '@/components/Layout/SectionSubtitle';
+import Uptime from '@/components/Uptime';
+import DiskIo from '@/components/DiskIo';
+import NetworkConnectionsGroup from '@/components/NetworkConnectionsGroup';
 
 export default function Home() {
   const [cpu, setCpu] = useState({});
@@ -14,6 +13,8 @@ export default function Home() {
   const [disks, setDisks] = useState({});
   const [network, setNetwork] = useState({});
   const [nextUpdateIn, setNextUpdateIn] = useState(30);
+  const [uptime, setUptime] = useState({});
+  const [diskIo, setDiskIo] = useState({});
 
   function tick() {
     if (nextUpdateIn > 1) {
@@ -28,12 +29,18 @@ export default function Home() {
     queryNextApi('memory').then(data => setMemory(data));
     queryNextApi('disk').then(data => setDisks(data['disk_usage']));
     queryNextApi('network').then(data => setNetwork(data));
+    queryNextApi('uptime').then(data => setUptime(data));
+    queryNextApi('diskio').then(data => setDiskIo(data));
 
     const interval = setInterval(async () => {
       const cpuData = await queryNextApi('cpu');
       setCpu(cpuData);
       const memoryData = await queryNextApi('memory');
       setMemory(memoryData);
+      const uptimeData = await queryNextApi('uptime');
+      setUptime(uptimeData);
+      const diskIoData = await queryNextApi('diskio');
+      setDiskIo(diskIoData);
     }, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -50,22 +57,19 @@ export default function Home() {
         <span className="text-2xl">Keep a pulse on your machine's health</span>
       </div>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col xl:flex-row gap-6">
           <div className="flex flex-col gap-6">
             <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} />
             <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
+            <Uptime uptime={uptime} />
           </div>
-          <Disks disks={disks} />
-        </div>
-        <div className="flex flex-col gap-x-6 bg-gray-950 p-12 rounded-md">
           <div>
-            <SectionTitle>Network</SectionTitle>
-            <SectionSubtitle>Monitor your Network usage.</SectionSubtitle>
+            <Disks disks={disks} />
+            <DiskIo diskIo={diskIo} />
           </div>
-          <div className="grid grid-cols-1 xl:grid-cols-1 gap-4 lg:gap-6">
-            <Network network={network} />
-            <Connections network={network} />
-          </div>
+        </div>
+        <div className="3xl:pr-24">
+          <NetworkConnectionsGroup network={network} />
         </div>
       </div>
     </main>
