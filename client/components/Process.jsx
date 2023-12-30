@@ -15,7 +15,7 @@ export default function Process({ pid }) {
         <span className="text-xl font-semibold">{process['name']}</span>
         <span className="text-2xl">{process['pid']}</span>
       </p>
-      <p className="mt-3 font-mono break-words text-wrap whitespace-normal overflow-scroll">{process['cmdline']}</p>
+      <p className="mt-3 font-mono break-words text-wrap whitespace-normal">{process['cmdline']}</p>
     </div>
   );
 }
