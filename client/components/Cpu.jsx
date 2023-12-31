@@ -18,7 +18,7 @@ export default function Cpu({ cpu, nextUpdateIn, cpuModel }) {
   }
 
   return (
-    <div className="bg-gray-950 p-6 sm:p-12 rounded-md">
+    <div className="bg-gray-900 p-6 sm:p-12 rounded-md">
       <SectionTitle>CPU</SectionTitle>
       <SectionSubtitle>Monitor your CPU usage.</SectionSubtitle>
       <p>

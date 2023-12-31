@@ -11,7 +11,7 @@ export default function Disks({ disks }) {
   const freeData = disks?.length > 0 && disks?.map(disk => bytesToGb(disk['free'], true));
 
   return (
-    <div className="bg-gray-950 p-6 sm:p-12 rounded-md h-full">
+    <div className="bg-gray-900 p-6 sm:p-12 rounded-md h-full">
       <SectionTitle>Disks</SectionTitle>
       <SectionSubtitle>Monitor disk usage across your machine</SectionSubtitle>
       <FourColGridWrapper>

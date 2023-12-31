@@ -1,6 +1,6 @@
 export default function CpuModel({ cpuModel }) {
   return (
-    <div className="bg-gray-800 p-5 rounded-md">
+    <div className="bg-gray-800 p-5 rounded-md text-gray-300">
       <div className="flex flex-col gap-3">
         <p className="flex justify-between text-xl">
           <span>Vendor</span>

@@ -7,7 +7,7 @@ import MemoryChart from '@/components/MemoryChart';
 
 export default function Memory({ memory, nextUpdateIn }) {
   return (
-    <div className="bg-gray-950 p-12 rounded-md">
+    <div className="bg-gray-900 p-12 rounded-md">
       <SectionTitle>Memory</SectionTitle>
       <SectionSubtitle>Monitor your Memory usage.</SectionSubtitle>
       <p>

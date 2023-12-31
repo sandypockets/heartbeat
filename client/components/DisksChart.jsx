@@ -35,7 +35,7 @@ export default function DisksChart({ labels, usedData, freeData }) {
   };
 
   return (
-    <div className="bg-gray-800 p-3 rounded-md h-full min-h-72 w-full">
+    <div className="bg-gray-700 p-3 rounded-md h-full min-h-72 w-full">
       <Bar data={data} options={options} />
     </div>
   );
