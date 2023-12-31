@@ -3,17 +3,17 @@ import SectionTitle from '@/components/Layout/SectionTitle';
 import SectionSubtitle from '@/components/Layout/SectionSubtitle';
 import BootTime from '@/components/BootTime';
 import DiskSpace from '@/components/DiskSpace';
-import CpuModel from '@/components/CpuModel';
+import Platform from '@/components/Platform';
 
-export default function QuickStats({ uptime, disk, cpuModel }) {
+export default function QuickStats({ uptime, disk, platform }) {
   return (
     <div className="bg-gray-950 p-6 sm:p-12 rounded-md">
-      <SectionTitle>Quick stats</SectionTitle>
-      <SectionSubtitle>Health at a glance</SectionSubtitle>
+      <SectionTitle>Your machine</SectionTitle>
       <div className="mt-12 flex flex-col gap-6">
         <BootTime bootTime={uptime['boot_time']} />
         <Uptime uptime={uptime['uptime']} />
         <DiskSpace disk={disk} />
+        <Platform platform={platform} />
       </div>
     </div>
   );

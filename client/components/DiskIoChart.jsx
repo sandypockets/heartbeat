@@ -131,7 +131,7 @@ export default function DiskIoChart({ diskIo }) {
       <div className="bg-gray-800 rounded-md my-3 h-56 p-4 w-full">
         <Line data={data} options={options} />
       </div>
-      <div className="bg-gray-800 rounded-md my-3 h-56 p-4 w-full">
+      <div className="bg-gray-800 rounded-md my-3 h-60 p-4 w-full">
         <Line data={dataTwo} options={optionsTwo} />
       </div>
       <div className="bg-gray-800 rounded-md my-3 h-60 p-4 w-full">

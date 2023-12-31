@@ -64,7 +64,7 @@ export default function CpuChart({ cpu }) {
   };
 
   return (
-    <div className="bg-gray-800 rounded-md my-3 h-72 p-4 w-full">
+    <div className="bg-gray-800 rounded-md my-3 h-full min-h-72 p-4 w-full">
       <Line data={data} options={options} />
     </div>
   );

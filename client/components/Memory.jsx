@@ -13,7 +13,7 @@ export default function Memory({ memory, nextUpdateIn }) {
       <p>
         Next update in <span className={nextUpdateIn < 10 ? 'text-green-400' : ''}>{nextUpdateIn}</span>
       </p>
-      <FourColGridWrapper>
+      <div className="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 gap-3 mt-3">
         <ItemWrapper>
           <h5 className="text-sm font-light mb-1">Total</h5>
           <p className="font-mono font-xl">{memory['memory_usage']?.['total']} bytes</p>
@@ -52,7 +52,7 @@ export default function Memory({ memory, nextUpdateIn }) {
           <p className="font-mono font-xl">{memory['memory_usage']?.['wired']} bytes</p>
           <p className="font-mono">{bytesToGb(memory['memory_usage']?.['wired']).toString().slice(0, 10)} GB</p>
         </ItemWrapper>
-      </FourColGridWrapper>
+      </div>
       <MemoryChart memory={memory} />
     </div>
   );
