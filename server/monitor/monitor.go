@@ -209,3 +209,11 @@ func GetCpuInfo() ([]cpu.InfoStat, error) {
 	}
 	return cpuInfo, nil
 }
+
+func GetPlatformInfo() (host.InfoStat, error) {
+	platformInfo, err := host.Info()
+	if err != nil {
+		return host.InfoStat{}, err
+	}
+	return *platformInfo, nil
+}

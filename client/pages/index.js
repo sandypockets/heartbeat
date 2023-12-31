@@ -16,6 +16,7 @@ export default function Home() {
   const [nextUpdateIn, setNextUpdateIn] = useState(30);
   const [uptime, setUptime] = useState({});
   const [diskIo, setDiskIo] = useState({});
+  const [platform, setPlatform] = useState({});
 
   function tick() {
     if (nextUpdateIn > 1) {
@@ -33,6 +34,7 @@ export default function Home() {
     queryNextApi('uptime').then(data => setUptime(data));
     queryNextApi('diskio').then(data => setDiskIo(data));
     queryNextApi('cpumodel').then(data => setCpuModel(data['cpu_model'][0]));
+    queryNextApi('platform').then(data => setPlatform(data));
 
     const interval = setInterval(async () => {
       const cpuData = await queryNextApi('cpu');
@@ -59,13 +61,13 @@ export default function Home() {
         <span className="text-2xl">Keep a pulse on your machine's health</span>
       </div>
       <div className="flex flex-col md:grid md:grid-cols-2 4xl:grid-cols-3 gap-3">
-        <QuickStats uptime={uptime} disk={disks[0]} cpuModel={cpuModel} />
-        <div className="col-span-2">
-          <Disks disks={disks} />
-        </div>
         <Cpu cpu={cpu} nextUpdateIn={nextUpdateIn} cpuModel={cpuModel} />
         <DiskIo diskIo={diskIo} />
         <Memory memory={memory} nextUpdateIn={nextUpdateIn} />
+        <QuickStats uptime={uptime} disk={disks[0]} platform={platform} />
+        <div className="col-span-2">
+          <Disks disks={disks} />
+        </div>
       </div>
       <div className="mt-3">
         <NetworkConnectionsGroup network={network} />
