@@ -1,14 +1,18 @@
 # Heartbeat
 Heartbeat is system health monitoring tool. It's comprised of a backend server written in Go and a Next.js frontend. Together, the application provides real-time monitoring of various key system metrics, showcasing how Go can be used for efficient system data collection and how these metrics can be visualized in a web interface.
 
+![screenshot](./docs/screenshot.png)
+
 ## Purpose
 The primary goal of Heartbeat is to offer a clear and immediate view of key performance metrics for a server environment. It's designed for developers, system administrators, or anyone interested in getting hands-on experience with system or server monitoring tools. Key features include:
 
 - **Real-Time Data**: Tracks and displays real-time CPU, memory, disk, and network usage.
 - **Historical Trends**: Visualizes CPU and memory usage over different time intervals for trend analysis.
 - **Process Information**: Provides details on specific running processes.
-- **Network Insights**: Includes detailed network statistics for a comprehensive view of network health.
+- **Network Insights**: Includes detailed list of network operations.
 - **User-Friendly Interface**: The Next.js frontend simplifies data presentation, making it accessible even for those new to system monitoring.
+
+Note: Heartbeat was built as a hobby project, and is not production ready. If you intend to use it in production, you'll need to make some further adjustments for security, like adding authentication.
 
 ## Learning Experience
 Building Heartbeat has been an educational journey in utilizing Go for backend development, focusing on performance and concurrency, and integrating it with a modern JavaScript framework like Next.js for the frontend. This project serves as a practical example for anyone interested in learning about these technologies or server monitoring concepts.
